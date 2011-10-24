@@ -8,6 +8,9 @@ grass {
     // default is true
     relative_assets = true
 
+    // default is true
+    line_comments = true
+
     // other options: nested, expanded, compact, compressed
     output_style = "compact"
 

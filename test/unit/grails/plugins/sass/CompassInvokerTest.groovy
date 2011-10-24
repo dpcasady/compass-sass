@@ -18,6 +18,7 @@ class CompassInvokerTest extends GroovyTestCase {
                     css_dir: 'src/web-app/css',
                     images_dir: 'src/web-app/images',
                     relative_assets: true,
+                    line_comments: true,
                     framework_output_type: 'sass'
             ]
     ]

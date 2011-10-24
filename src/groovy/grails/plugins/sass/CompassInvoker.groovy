@@ -45,6 +45,7 @@ class CompassInvoker {
         def css_dir = config.grass?.css_dir
         def images_dir = config.grass?.images_dir
         def relative_assets = config.grass?.relative_assets == null ? true : config.compass?.relative_assets
+        def line_comments = config.grass?.line_comments == null ? true : config.grass?.line_comments
         def output_style = config.grass?.output_style ?: 'compact'
 
         ensureParameterSet sass_dir, "sass_dir is not set (GrassConfig.groovy)", callback
@@ -58,6 +59,7 @@ class CompassInvoker {
                 '--css-dir', "${css_dir}",
                 images_dir ? ['--images-dir', "${images_dir}"] : [],
                 relative_assets ? "--relative-assets" : "",
+                line_comments ? "" : "--no-line-comments",
                 '--output-style', "${output_style}"].flatten()
 
         def p = runCompassCommand(sassCompileCommandLineArgs)

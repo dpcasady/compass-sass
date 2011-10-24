@@ -41,6 +41,8 @@ You can also use the <a href='http://grails.org/plugin/resources'>resources plug
 * **css_dir**: Output directory for compiled CSS.
 * **relative_assets**: Whether or not compass will generate relative URLs.  
 `Values: true, false`
+* **line_comments**: Whether or not compass will generate debugging comments that display the original location of your selectors. URLs.
+`Values: true, false`
 * **output_style**: The output format of the CSS.   
 `Values: nested, expanded, compact, compressed`
 * **framework\_output\_type**: The output of install-blueprint.   
