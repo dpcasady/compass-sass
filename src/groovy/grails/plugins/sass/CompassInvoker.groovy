@@ -44,7 +44,7 @@ class CompassInvoker {
         def sass_dir = config.grass?.sass_dir
         def css_dir = config.grass?.css_dir
         def images_dir = config.grass?.images_dir
-        def relative_assets = config.grass?.relative_assets == null ? true : config.compass?.relative_assets
+        def relative_assets = config.grass?.relative_assets == null ? true : config.grass?.relative_assets
         def output_style = config.grass?.output_style ?: 'compact'
 
         ensureParameterSet sass_dir, "sass_dir is not set (GrassConfig.groovy)", callback
