@@ -19,8 +19,13 @@ class CompassInvoker {
 
         def shells = [['sh', '-c'], ['cmd', '/c']]
         def changeDirCommand = "cd ${input.parent}"
-        def compassCompileCommand =
-        "jruby -S compass compile ${input.name} --sass-dir . --css-dir ${output.parentFile.absolutePath} --output-style compressed"
+        
+        def shellArgs = ['jruby', '-S', 'compass', 'compile', input.name]
+        shellArgs << '--sass-dir' << '.'
+        shellArgs << '--css-dir' << output.parentFile.absolutePath
+        shellArgs += getPreferenceArgs(null)
+
+        def compassCompileCommand = shellArgs.join(' ')
 
         for (def shell in shells) {
             attemptExecutionInShell(shell, changeDirCommand, compassCompileCommand)
@@ -42,40 +47,15 @@ class CompassInvoker {
     }
 
     public void compile(callback) {
-        def sass_dir = config.grass?.sass_dir
-        def css_dir = config.grass?.css_dir
-        def images_dir = config.grass?.images_dir
-        def relative_assets = config.grass?.relative_assets == null ? true : config.grass?.relative_assets
-        def line_comments = config.grass?.line_comments == null ? true : config.grass?.line_comments
-        def output_style = config.grass?.output_style ?: 'compact'
-
-        ensureParameterSet sass_dir, "sass_dir is not set (GrassConfig.groovy)", callback
-        ensureParameterSet css_dir, "css_dir is not set (GrassConfig.groovy)", callback
-        ensureParameterSet output_style, "output_style is not set (GrassConfig.groovy)", callback
-
         println "Compiling sass stylesheets..."
-
-        def sassCompileCommandLineArgs = [
-                'compile',
-                '--sass-dir', "${sass_dir}",
-                '--css-dir', "${css_dir}",
-                images_dir ? ['--images-dir', "${images_dir}"] : [],
-                relative_assets ? "--relative-assets" : "",
-                '--output-style', "${output_style}",
-                line_comments ? "" : "--no-line-comments",
-                forceRecompile ? "--force" : "",
-        ].flatten()
-
-        def p = runCompassCommand(sassCompileCommandLineArgs)
+        def p = runCompassCommand(['compile'] + getCompileArgs(callback))
         p?.waitFor()
     }
 
     public void watch() {
-        def images_dir = config.grass?.images_dir
-        runCompassCommandInThread(['watch', '--sass-dir', config.grass.sass_dir,
-                '--css-dir', config.grass.css_dir, (images_dir ? ['--images-dir', images_dir] : []),
-                '--output-style', config.grass.output_style].flatten())
+        runCompassCommandInThread(['watch'] + getCompileArgs(null))
     }
+
 
     public void installBlueprint() {
         def installBlueprintCommand = ['create', '--using', 'blueprint', '--syntax', (config.grass?.framework_output_type ?: "scss")]
@@ -124,7 +104,7 @@ class CompassInvoker {
     }
 
     protected void ensureParameterSet(parameter, message, callback) {
-        if (!parameter) {
+        if (!parameter && callback != null) {
             callback(message)
         }
     }
@@ -136,6 +116,36 @@ class CompassInvoker {
     }
 
     protected def killCompass() {
-        javaProcessKiller.killAll('org/jruby/Main -S compass')
+        javaProcessKiller.killAllRegex(~/.*org[\.\/]jruby[\.\/]Main\s+-[sS]\s+compass.*/)
+    }
+
+    protected def getCompileArgs(callback) {
+        def sass_dir = config.grass?.sass_dir
+        def css_dir = config.grass?.css_dir
+
+        ensureParameterSet sass_dir, "sass_dir is not set (GrassConfig.groovy)", callback
+        ensureParameterSet css_dir, "css_dir is not set (GrassConfig.groovy)", callback
+
+        return ['--sass-dir', "${sass_dir}", '--css-dir', "${css_dir}"] + getPreferenceArgs(callback)
+    }
+
+    protected def getPreferenceArgs(callback) {
+
+        def images_dir = config.grass?.images_dir
+        def relative_assets = config.grass?.relative_assets == null ? true : config.grass?.relative_assets
+        def line_comments = config.grass?.line_comments == null ? true : config.grass?.line_comments
+        def output_style = config.grass?.output_style ?: 'compact'
+        
+        ensureParameterSet output_style, "output_style is not set (GrassConfig.groovy)", callback
+        
+        def args = []
+        
+        args << '--output-style' << output_style
+        if (images_dir) args << '--images-dir' << images_dir
+        if (relative_assets) args << '--relative-assets'
+        if (! line_comments) args << '--no-line-comments'
+        if (forceRecompile) args << '--force'
+        
+        return args
     }
 }

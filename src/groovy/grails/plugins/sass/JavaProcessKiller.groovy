@@ -1,9 +1,20 @@
 package grails.plugins.sass
 
+import java.util.regex.Pattern
+
 class JavaProcessKiller {
     public void killAll(String processPattern) {
         getRunningJavaProcesses().each { String processLine ->
             if (processLine.contains(processPattern)) {
+                String pidToKill = getPidFromProcessLine(processLine)
+                killPid(pidToKill)
+            }
+        }
+    }
+    
+    public void killAllRegex(Pattern processRegexPattern) {
+        getRunningJavaProcesses().each { String processLine ->
+            if (processRegexPattern.matcher(processLine).matches()) {
                 String pidToKill = getPidFromProcessLine(processLine)
                 killPid(pidToKill)
             }
