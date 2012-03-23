@@ -56,6 +56,27 @@ You can also use the <a href='http://grails.org/plugin/resources'>resources plug
 `Values: sass, scss`
 * **images_dir**: *(Optional)* Location for images referenced in CSS.
 
+GrassConfig.groovy is an environment-aware config file, so you can customize the behavior by adding an environments block. The following would keep CSS files compressed except in your development environment:
+
+<pre><code>grass {
+    sass_dir = "./src/stylesheets"
+    css_dir = "./web-app/css"
+    images_dir = "./web-app/images"
+    relative_assets = true
+    framework_output_type = "scss"
+    line_comments = false
+    output_style = "compressed"
+}
+environments {
+    development {
+        grass {
+            line_comments = true
+            output_style = "compact"
+        }
+    }
+}</code></pre>
+
+
 ##What if my team members/I don't have jRuby installed?##
 If jRuby is not installed, you will receive a warning during run-app, and SASS/SCSS files will not be compiled. As long as you check in compiled CSS, this isn't an issue for multiple-developer teams. If you want to use the resources plugin, everyone will need jRuby installed.
 

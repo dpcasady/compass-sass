@@ -1,7 +1,8 @@
-import grails.util.GrailsUtil
 import org.grails.plugin.resource.mapper.MapperPhase
 import grails.plugins.sass.JavaProcessKiller
 import grails.plugins.sass.CompassInvoker
+import grails.util.GrailsUtil
+//import grails.util.Environment
 
 class SassResourceMapper {
     def grailsApplication
@@ -38,8 +39,10 @@ class SassResourceMapper {
     private ConfigObject getConfig() {
         def config = new ConfigObject()
         def classLoader = new GroovyClassLoader(getClass().classLoader)
+        //config.merge(new ConfigSlurper(Environment.getCurrent().getName()).parse(classLoader.loadClass('DefaultGrassConfig')))
         config.merge(new ConfigSlurper(GrailsUtil.environment).parse(classLoader.loadClass('DefaultGrassConfig')))
         try {
+            //new ConfigSlurper(Environment.getCurrent().getName()).parse(classLoader.loadClass('GrassConfig'))
             new ConfigSlurper(GrailsUtil.environment).parse(classLoader.loadClass('GrassConfig'))
         }
         catch (Exception ignored) {

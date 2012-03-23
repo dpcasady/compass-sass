@@ -1,12 +1,16 @@
 package grails.plugins.sass
 
+import grails.util.GrailsUtil
+//import grails.util.Environment
+
 class CompassInvoker {
     def config
     def javaProcessKiller
     boolean forceRecompile = false
 
     public CompassInvoker(File grassConfigLocation, def javaProcessKiller) {
-        this(new ConfigSlurper().parse(grassConfigLocation.toURL()), javaProcessKiller)
+        //this(new ConfigSlurper(Environment.getCurrent().getName()).parse(grassConfigLocation.toURL()), javaProcessKiller)
+        this(new ConfigSlurper(GrailsUtil.environment).parse(grassConfigLocation.toURL()), javaProcessKiller)
     }
 
     public CompassInvoker(def config, def javaProcessKiller) {
