@@ -11,7 +11,7 @@ class JavaProcessKiller {
             }
         }
     }
-    
+
     public void killAllRegex(Pattern processRegexPattern) {
         getRunningJavaProcesses().each { String processLine ->
             if (processRegexPattern.matcher(processLine).matches()) {

@@ -26,7 +26,7 @@ class JavaProcessKillerTest extends GroovyTestCase {
         def newProcessCount = javaProcessKiller.getRunningJavaProcesses().size()
         assertEquals("Kill all is not properly killing processes", oldProcessCount, newProcessCount)
     }
-    
+
     public void test_killAllRegex_successfully_kills_processes() {
         def oldProcessCount = javaProcessKiller.getRunningJavaProcesses().size()
         startAsynchronousJrubyProcess()
