@@ -58,6 +58,23 @@ class CompassInvoker {
         runCompassCommandInThread(['watch'] + getCompileArgs(null))
     }
 
+    public void execute() {
+        def what = config.grass.containsKey("do_on_start") ? config.grass.do_on_start : "watch"
+        switch (what) {
+            case "compile":
+                compile() { msg ->
+                    event("StatusError", [msg])
+                }
+                break;
+            case "watch":
+                watch();
+                break;
+            case "print":
+                String[] command = ['jruby', '-S', 'compass', ['watch'] + getCompileArgs(null)].flatten()
+                System.out.append("Execute manually if needed: ${command.join(' ')}\n")
+                break;
+        }
+    }
 
     public void installBlueprint() {
         def installBlueprintCommand = ['create', '--using', 'blueprint', '--syntax', (config.grass?.framework_output_type ?: "scss")]
