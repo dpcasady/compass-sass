@@ -1,6 +1,9 @@
+/target
+/target-eclipse
 stacktrace.log
 .sass-cache
-/target
 .idea
-*.iml
 out/
+*.log
+*.iml
+web-app/WEB-INF
