@@ -2,14 +2,17 @@
 Compass, SASS and SCSS support for Grails
 
 ## Installation
-```sh
-$ grails install-plugin compass-sass
+Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
+
+```groovy
+compile ":compass-sass:0.7"
 ```
 
-## Pre-Requisites
+## Prerequisites
 To use this plugin, you will need to have jRuby installed and on the PATH. During installation, the plugin will check for the existence of Compass, and if the gem isn't installed, it will install it.
 If you have RVM installed, the gem path is incorrect unless rvm is set to use the "default" ruby. If you're having issues,
 try to manually install compass into RVM, and restart your terminal to make sure JRuby picks up the PATH change.
+
 ```sh
 $ rvm use --default (version)
 $ gem install compass
@@ -23,7 +26,8 @@ After installing, you're done. During grails run-app, compass is started to watc
 * **grails update-compass** - Updates compass and any of its dependent gems.
 
 ## Resources integration
-You can also use the <a href='http://grails.org/plugin/resources'>resources plugin</a> with the following stanza:
+You can also use the [Resources Plugin](http://grails.org/plugin/resources) by including something like the following in your ApplicationResources file, or wherever you are defining your resources.
+
 ```groovy
 mymodule {
     resource url: '/sass/test.scss', attrs: [type: 'css'], disposition: 'head'
@@ -34,6 +38,7 @@ mymodule {
 
 ## Configuration
 ### GrassConfig.groovy
+
 ```groovy
 grass {
     sass_dir = "./src/stylesheets"
