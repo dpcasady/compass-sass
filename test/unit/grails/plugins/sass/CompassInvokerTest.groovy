@@ -3,13 +3,10 @@ package grails.plugins.sass
 class CompassInvokerTest extends GroovyTestCase {
     CompassInvoker compass
 
-    def blueprintScssFiles = [new File("src/stylesheets/ie.scss"), new File("src/stylesheets/print.scss"), new File("src/stylesheets/screen.scss"), new File("src/stylesheets/partials/_base.scss")]
-    def blueprintSassFiles = [new File("src/stylesheets/ie.sass"), new File("src/stylesheets/print.sass"), new File("src/stylesheets/screen.sass"), new File("src/stylesheets/partials/_base.sass")]
-    def blueprintCssFiles = [
-            new File('src/web-app/css/ie.css'),
-            new File('src/web-app/css/print.css'),
-            new File('src/web-app/css/screen.css')
-    ]
+    def scssNames = ['ie', 'print', 'screen', 'partials/_base']
+    def blueprintScssFiles = scssNames.collect { new File("src/stylesheets/${it}.scss") }
+    def blueprintSassFiles = scssNames.collect { new File("src/stylesheets/${it}.sass") }
+    def blueprintCssFiles = scssNames[0..2].collect { new File("src/web-app/css/${it}.css") }
 
     def validConfig = [
             grass:
@@ -25,11 +22,11 @@ class CompassInvokerTest extends GroovyTestCase {
             ]
     ]
 
-    public void setUp() {
+    void setUp() {
         compass = new CompassInvoker(new File("grails-app/conf/DefaultGrassConfig.groovy"), new JavaProcessKiller())
     }
 
-    public void test_compile() {
+    void test_compile() {
         def compass = new CompassInvoker(validConfig, new JavaProcessKiller())
         compass.installBlueprint()
         blueprintCssFiles*.delete()
@@ -40,7 +37,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertFalse("One of ${blueprintCssFiles} not created", someFileNotCreated)
     }
 
-    public void test_compile_no_images_dir() {
+    void test_compile_no_images_dir() {
         def config = [
                 grass:
                 [
@@ -59,7 +56,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertFalse("One of ${blueprintCssFiles} not created", someFileNotCreated)
     }
 
-    public void test_compile_single_file() {
+    void test_compile_single_file() {
         File input = new File('web-app/sass/test.scss')
         assertTrue("Test setup is bad", input.exists())
 
@@ -71,7 +68,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertTrue(output.exists())
     }
 
-    public void test_line_comments_compile_flag() {
+    void test_line_comments_compile_flag() {
         def config = [
                 grass:
                 [
@@ -98,7 +95,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertTrue("Test file is being generated without line comments", testCss.text.contains('/*'))
     }
 
-    public void test_compass_gem_is_installed() {
+    void test_compass_gem_is_installed() {
         def output = new ByteArrayOutputStream()
 
         Process p = compass.runCompassCommand(['--version'] as String[], new PrintStream(output))
@@ -108,7 +105,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertTrue("Compass gem does not seem to be runnable: $processOutput", (processOutput =~ /Compass \d\.\d\d/).find())
     }
 
-    public void test_killing_compass_doesnt_leak_processes() {
+    void test_killing_compass_doesnt_leak_processes() {
         def javaProcessKiller = new JavaProcessKiller()
         int javaProcessCount = javaProcessKiller.getRunningJavaProcesses().size()
         compass.watch()
@@ -118,7 +115,7 @@ class CompassInvokerTest extends GroovyTestCase {
         assertTrue("Watch command is leaking processes", newJavaProcessCount <= javaProcessCount)
     }
 
-    public void test_install_blueprint_scss_output() {
+    void test_install_blueprint_scss_output() {
         def config = [
                 grass:
                 [
@@ -139,7 +136,7 @@ class CompassInvokerTest extends GroovyTestCase {
         blueprintScssFiles.each { File file -> assertTrue("${file.name} was not created", file.exists()) }
     }
 
-    public void test_install_blueprint_sass_output() {
+    void test_install_blueprint_sass_output() {
         def compass = new CompassInvoker(validConfig, new JavaProcessKiller())
 
         blueprintSassFiles*.delete()
@@ -148,7 +145,7 @@ class CompassInvokerTest extends GroovyTestCase {
         blueprintSassFiles.each { assertTrue("${it.name} was not created", it.exists())}
     }
 
-    public void test_install_blueprint_framework_output_param_unnecessary() {
+    void test_install_blueprint_framework_output_param_unnecessary() {
         def config = [
                 grass:
                 [

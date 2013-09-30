@@ -1,16 +1,16 @@
 def createGrassConfigFile() {
     println "Creating GrassConfig.groovy if not already present"
-    Ant.copy(
+    ant.copy(
             tofile: "${basedir}/grails-app/conf/GrassConfig.groovy", overwrite: false,
             file: "${compassSassPluginDir}/grails-app/conf/DefaultGrassConfig.groovy")
 }
 createGrassConfigFile()
 
-includeTargets << new File("${compassSassPluginDir}/scripts/_CompassGems.groovy")
-includeTargets << new File("${compassSassPluginDir}/scripts/_GetCompassInvoker.groovy")
-includeTargets << new File("${compassSassPluginDir}/scripts/_GemCommands.groovy")
+includeTargets << new File(compassSassPluginDir, "scripts/_CompassGems.groovy")
+includeTargets << new File(compassSassPluginDir, "scripts/_GetCompassInvoker.groovy")
+includeTargets << new File(compassSassPluginDir, "scripts/_GemCommands.groovy")
 
-def isJRubyInstalled() {
+boolean isJRubyInstalled() {
     try {
         println "JRuby version: ${getOutputFromCommand('jruby --version')}"
     }

@@ -1,22 +1,22 @@
 package grails.plugins.sass
 
-import grails.util.GrailsUtil
+import grails.util.Environment
 
 class CompassInvoker {
     def config
     def javaProcessKiller
     boolean forceRecompile = false
 
-    public CompassInvoker(File grassConfigLocation, def javaProcessKiller) {
-        this(new ConfigSlurper(GrailsUtil.environment).parse(grassConfigLocation.toURL()), javaProcessKiller)
+    CompassInvoker(File grassConfigLocation, javaProcessKiller) {
+        this(new ConfigSlurper(Environment.current.name).parse(grassConfigLocation.toURI().toURL()), javaProcessKiller)
     }
 
-    public CompassInvoker(def config, def javaProcessKiller) {
+    CompassInvoker(config, javaProcessKiller) {
         this.config = config
         this.javaProcessKiller = javaProcessKiller
     }
 
-    public void compileSingleFile(File input, File output) {
+    void compileSingleFile(File input, File output) {
         output.parentFile.mkdirs()
 
         def shells = [['sh', '-c'], ['cmd', '/c']]
@@ -29,12 +29,12 @@ class CompassInvoker {
 
         def compassCompileCommand = shellArgs.join(' ')
 
-        for (def shell in shells) {
+        for (shell in shells) {
             attemptExecutionInShell(shell, changeDirCommand, compassCompileCommand)
         }
     }
 
-    private boolean attemptExecutionInShell(def shell, String changeDirCommand, String compassCompileCommand) {
+    private boolean attemptExecutionInShell(shell, String changeDirCommand, String compassCompileCommand) {
         try {
             shell << (changeDirCommand + " && " + compassCompileCommand)
             def p = shell.execute()
@@ -48,18 +48,17 @@ class CompassInvoker {
         return true
     }
 
-    public void compile(callback) {
+    void compile(callback) {
         println "Compiling sass stylesheets..."
         def p = runCompassCommand(['compile'] + getCompileArgs(callback))
         p?.waitFor()
     }
 
-    public void watch() {
+    void watch() {
         runCompassCommandInThread(['watch'] + getCompileArgs(null))
     }
 
-
-    public void installBlueprint() {
+    void installBlueprint() {
         def installBlueprintCommand = ['create', '--using', 'blueprint', '--syntax', (config.grass?.framework_output_type ?: "scss")]
 
         def images_dir = config.grass?.images_dir
@@ -77,11 +76,11 @@ class CompassInvoker {
         }
     }
 
-    protected Process runCompassCommand(def compassArgs, PrintStream output = System.out, PrintStream error = System.err) {
+    protected Process runCompassCommand(compassArgs, PrintStream output = System.out, PrintStream error = System.err) {
         String[] command = ['jruby', '-S', 'compass', compassArgs].flatten()
         output.append("Executing: ${command.join(' ')}\n")
 
-        Process p = null
+        Process p
         try {
             p = command.execute()
             p.consumeProcessOutput(output, error)
@@ -96,14 +95,13 @@ class CompassInvoker {
 
     private static boolean shutdownHookAdded = false
 
-    protected def runCompassCommandInThread(def compassArgs) {
+    protected runCompassCommandInThread(compassArgs) {
         if (!shutdownHookAdded) {
             addShutdownHookToKillCompass()
         }
 
         Thread.start {
-            def process = runCompassCommand(compassArgs)
-            process?.waitFor()
+            runCompassCommand(compassArgs)?.waitFor()
         }
     }
 
@@ -119,11 +117,11 @@ class CompassInvoker {
         }
     }
 
-    protected def killCompass() {
+    protected killCompass() {
         javaProcessKiller.killAllRegex(~/.*org[\.\/]jruby[\.\/]Main\s+-[sS]\s+compass.*/)
     }
 
-    protected def getCompileArgs(callback) {
+    protected getCompileArgs(callback) {
         def sass_dir = config.grass?.sass_dir
         def css_dir = config.grass?.css_dir
 
@@ -133,7 +131,7 @@ class CompassInvoker {
         return ['--sass-dir', "${sass_dir}", '--css-dir', "${css_dir}"] + getPreferenceArgs(callback)
     }
 
-    protected def getPreferenceArgs(callback) {
+    protected getPreferenceArgs(callback) {
 
         def images_dir = config.grass?.images_dir
         def relative_assets = config.grass?.relative_assets == null ? true : config.grass?.relative_assets
