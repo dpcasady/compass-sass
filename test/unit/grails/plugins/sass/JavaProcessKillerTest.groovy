@@ -1,25 +1,21 @@
 package grails.plugins.sass
 
 class JavaProcessKillerTest extends GroovyTestCase {
-    JavaProcessKiller javaProcessKiller
+    private JavaProcessKiller javaProcessKiller = new JavaProcessKiller()
 
-    public void setUp() {
-        javaProcessKiller = new JavaProcessKiller()
-    }
-
-    public void test_get_pid_from_process_line() {
+    void test_get_pid_from_process_line() {
         String pid = "1234"
         assertEquals("pid parsing does not grab pid correctly", pid, javaProcessKiller.getPidFromProcessLine("$pid org/jruby/Main -S compass"))
     }
 
-    public void test_getRunningJavaProcesses_returns_more_than_just_jps() {
+    void test_getRunningJavaProcesses_returns_more_than_just_jps() {
         String[] processes = javaProcessKiller.getRunningJavaProcesses()
         assertNotNull(processes)
         assertFalse("No proceses found", 0 == processes.size())
         assertFalse("Only JPS process found", 1 == processes.size())
     }
 
-    public void test_killAll_successfully_kills_processes() {
+    void test_killAll_successfully_kills_processes() {
         def oldProcessCount = javaProcessKiller.getRunningJavaProcesses().size()
         startAsynchronousJrubyProcess()
         javaProcessKiller.killAll("loop.rb")
@@ -27,7 +23,7 @@ class JavaProcessKillerTest extends GroovyTestCase {
         assertEquals("Kill all is not properly killing processes", oldProcessCount, newProcessCount)
     }
 
-    public void test_killAllRegex_successfully_kills_processes() {
+    void test_killAllRegex_successfully_kills_processes() {
         def oldProcessCount = javaProcessKiller.getRunningJavaProcesses().size()
         startAsynchronousJrubyProcess()
         javaProcessKiller.killAllRegex(~/.*lo{2,3}p.[rR]b.*/)

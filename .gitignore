@@ -7,3 +7,5 @@ out/
 *.log
 *.iml
 web-app/WEB-INF
+plugin.xml
+grails-compass-sass-*.zip

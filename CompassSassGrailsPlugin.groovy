@@ -3,10 +3,10 @@ class CompassSassGrailsPlugin {
     def grailsVersion = "2.0 > *"
     def pluginExcludes = [
             'grails-app/views/*.gsp',
-            'web-app/**/*',
-            'src/web-app/**/*',
+            'web-app/**',
+            'src/web-app/**',
             '**/MyAppResources.groovy',
-            'src/stylesheets/**/*'
+            'src/stylesheets/**'
     ]
 
     def title = "Compass Framework - SASS/SCSS support"
