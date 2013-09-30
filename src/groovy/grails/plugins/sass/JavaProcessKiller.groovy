@@ -3,7 +3,7 @@ package grails.plugins.sass
 import java.util.regex.Pattern
 
 class JavaProcessKiller {
-    public void killAll(String processPattern) {
+    void killAll(String processPattern) {
         getRunningJavaProcesses().each { String processLine ->
             if (processLine.contains(processPattern)) {
                 String pidToKill = getPidFromProcessLine(processLine)
@@ -12,7 +12,7 @@ class JavaProcessKiller {
         }
     }
 
-    public void killAllRegex(Pattern processRegexPattern) {
+    void killAllRegex(Pattern processRegexPattern) {
         getRunningJavaProcesses().each { String processLine ->
             if (processRegexPattern.matcher(processLine).matches()) {
                 String pidToKill = getPidFromProcessLine(processLine)
@@ -50,7 +50,7 @@ class JavaProcessKiller {
                     process.waitFor()
                     processKilledSuccessfully = true
                 }
-                catch (Exception e) {
+                catch (ignored) {
                 }
             }
         }

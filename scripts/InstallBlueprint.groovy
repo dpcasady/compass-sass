@@ -1,5 +1,5 @@
-includeTargets << grailsScript("Init")
-includeTargets << new File("${compassSassPluginDir}/scripts/_GetCompassInvoker.groovy")
+includeTargets << grailsScript("_GrailsInit")
+includeTargets << new File(compassSassPluginDir, "scripts/_GetCompassInvoker.groovy")
 
 target(installBlueprint: 'Install blueprint stylesheets') {
     boolean compassInstallationSuccessful = true
