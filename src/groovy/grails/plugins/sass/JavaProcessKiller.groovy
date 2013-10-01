@@ -3,6 +3,7 @@ package grails.plugins.sass
 import java.util.regex.Pattern
 
 class JavaProcessKiller {
+
     void killAll(String processPattern) {
         getRunningJavaProcesses().each { String processLine ->
             if (processLine.contains(processPattern)) {
@@ -26,19 +27,21 @@ class JavaProcessKiller {
         def p = ['jps', '-lm'].execute()
         p.consumeProcessOutput(new PrintStream(output), System.err)
         p.waitFor()
+        
         return output.toString().split("\\n")
     }
 
     protected String getPidFromProcessLine(String line) {
         def pidPattern = /^(\d+).*$/
         def matcher = (line =~ pidPattern)
+
         return matcher[0][1]
     }
 
     protected void killPid(String pid) {
         def killCommands = [
-                ['taskkill', '/F', '/PID', pid],
-                ['kill', pid]
+            ['taskkill', '/F', '/PID', pid],
+            ['kill', pid]
         ]
 
         boolean processKilledSuccessfully = false

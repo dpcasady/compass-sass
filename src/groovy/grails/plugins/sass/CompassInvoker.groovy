@@ -3,6 +3,7 @@ package grails.plugins.sass
 import grails.util.Environment
 
 class CompassInvoker {
+
     def config
     def javaProcessKiller
     boolean forceRecompile = false
@@ -132,7 +133,6 @@ class CompassInvoker {
     }
 
     protected getPreferenceArgs(callback) {
-
         def images_dir = config.grass?.images_dir
         def relative_assets = config.grass?.relative_assets == null ? true : config.grass?.relative_assets
         def line_comments = config.grass?.line_comments == null ? true : config.grass?.line_comments
