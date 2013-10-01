@@ -16,4 +16,7 @@ grass {
 
     // scss or sass
     framework_output_type = "scss"
+
+    // what to do when Tomcat is configured: "watch" (default), "compile", "print", otherwise do nothing
+    do_on_start = "watch"
 }

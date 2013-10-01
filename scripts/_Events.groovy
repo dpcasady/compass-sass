@@ -2,5 +2,5 @@ includeTargets << new File(compassSassPluginDir, "scripts/_GetCompassInvoker.gro
 
 eventConfigureTomcat = {
     compass.killCompass()
-    compass.watch()
+    compass.execute()
 }
