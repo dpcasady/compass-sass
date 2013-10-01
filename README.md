@@ -33,7 +33,7 @@ mymodule {
 
 *Note: `attrs: [type: 'css']` is required for the resources plugin to pick-up the files. Files must end in .sass or .scss to get picked up by the SASS resource mapper.*
 
-You can also set `do_on_start` to **compile**, which will only compile SASS/SCSS on the initial `grails run-app`.
+The main differnce between the two options are whether or not you want to have the generated css files available or not. Compass watch will compile them into the css_dir specified, the resources plugin will not—it compiles them behind the scenes. You can also set `do_on_start` to **compile**, which will only compile SASS/SCSS on the initial `grails run-app`.
 
 The following grails commands are also available:
 
