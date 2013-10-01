@@ -23,15 +23,14 @@ class SassResourceMapper {
 
         if (resource.sourceUrl && isFileSassFile(originalFile)) {
             File input = getOriginalFileSystemFile(resource.sourceUrl)
-            File output = new File(generateCompiledFileFromOriginal(originalFile.absolutePath))
-            compassInvoker.compileSingleFile(input, output)
+            File targetFile = new File(generateCompiledFileFromOriginal(originalFile.absolutePath))
+            compassInvoker.compileSingleFile(input, targetFile)
 
-            resource.processedFile = output
-
-            resource.contentType = 'text/css'
+            resource.processedFile = targetFile
             resource.sourceUrlExtension = 'css'
             resource.tagAttributes.rel = 'stylesheet'
             resource.actualUrl = generateCompiledFileFromOriginal(resource.originalUrl)
+            resource.contentType = 'text/css'
         }
     }
 
@@ -53,9 +52,10 @@ class SassResourceMapper {
     }
 
     private String generateCompiledFileFromOriginal(String original) {
-        original = original.replaceAll(/(?i)\.sass/, '.css')
-        original = original.replaceAll(/(?i)\.scss/, '.css')
-        original
+        String renamed = original
+        renamed = renamed.replaceAll(/(?i)\.sass/, '.css')
+        renamed = renamed.replaceAll(/(?i)\.scss/, '.css')
+        return renamed
     }
 
     private File getOriginalFileSystemFile(String sourcePath) {
