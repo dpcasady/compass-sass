@@ -1,5 +1,5 @@
 class CompassSassGrailsPlugin {
-    def version = "0.7"
+    def version = "0.7.1"
     def grailsVersion = "2.0 > *"
     def pluginExcludes = [
             'grails-app/views/*.gsp',
