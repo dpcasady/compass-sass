@@ -70,15 +70,16 @@ class CompassInvoker {
             case "watch":
                 watch()
                 break
-            case "print":
+            case "resources":
                 String[] command = ['jruby', '-S', 'compass', ['watch'] + getCompileArgs(null)].flatten()
+                System.out.append("Watching SASS/SCSS with the Resources Plugin...\n")
                 System.out.append("Execute manually if needed: ${command.join(' ')}\n")
                 break
         }
     }
 
     void installBlueprint() {
-        def installBlueprintCommand = ['create', '--using', 'blueprint', '--syntax', (config.grass?.framework_output_type ?: "scss")]
+        def installBlueprintCommand = ['create', '--using', 'blueprint', '--syntax', (config.grass?.preferred_syntax ?: "scss")]
 
         def images_dir = config.grass?.images_dir
         installBlueprintCommand << ['--sass-dir', config.grass.sass_dir, '--css-dir', config.grass.css_dir, '--javascripts-dir', 'js', (images_dir ? ['--images-dir', images_dir] : [])]

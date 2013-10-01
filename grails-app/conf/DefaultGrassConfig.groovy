@@ -1,22 +1,21 @@
 grass {
-    sass_dir = "./src/stylesheets"
 
     css_dir = "./web-app/css"
-
+    sass_dir = "./src/stylesheets"
     images_dir = "web-app/images"
 
-    // default is true
-    relative_assets = true
+    // You can select your preferred output style here (can be overridden via the command line):
+    // output_style = "expanded" // or "nested" or "compact" or "compressed"
 
-    // default is true
-    line_comments = true
+    // To enable relative paths to assets via compass helper functions. Uncomment:
+    // relative_assets = true
 
-    // other options: nested, expanded, compact, compressed
-    output_style = "compact"
+    // To disable debugging comments that display the original location of your selectors. Uncomment:
+    // line_comments = false
 
-    // scss or sass
-    framework_output_type = "scss"
+    // SASS or SCSS syntax. If you prefer the indented syntax, uncomment:
+    // preferred_syntax = "sass"
 
-    // what to do when Tomcat is configured: "watch" (default), "compile", "print", otherwise do nothing
+    // What to do when run-app is invoked: "watch" (default), "compile", "resources"
     do_on_start = "watch"
 }

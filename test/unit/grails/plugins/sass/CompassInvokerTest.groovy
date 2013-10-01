@@ -29,7 +29,7 @@ class CompassInvokerTest extends GroovyTestCase {
             relative_assets: true,
             output_style: 'expanded',
             line_comments: false,
-            framework_output_type: 'sass'
+            preferred_syntax: 'sass'
         ]
     ]
 
@@ -98,7 +98,7 @@ class CompassInvokerTest extends GroovyTestCase {
                 relative_assets: true,
                 output_style: 'expanded',
                 line_comments: false,
-                framework_output_type: 'sass'
+                preferred_syntax: 'sass'
             ]
         ]
 
@@ -145,7 +145,7 @@ class CompassInvokerTest extends GroovyTestCase {
                 images_dir: imagesDir,
                 relative_assets: true,
                 output_style: 'compact',
-                framework_output_type: 'scss'
+                preferred_syntax: 'scss'
             ]
         ]
 
@@ -164,7 +164,7 @@ class CompassInvokerTest extends GroovyTestCase {
         }
     }
 
-    void test_install_blueprint_framework_output_param_unnecessary() {
+    void test_install_blueprint_preferred_syntax_param_unnecessary() {
         def config = [
             grass: [
                 sass_dir: stylesheetsDir,
