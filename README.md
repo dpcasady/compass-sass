@@ -1,6 +1,8 @@
 # Compass Sass plugin
 [Compass](http://compass-style.org/), [SASS and SCSS](http://sass-lang.com/) support for Grails
 
+*This plugin is no longer under active development as the [Asset Pipeline Plugin](https://grails.org/plugin/asset-pipeline) is now preferred over the [Resources Plugin](http://grails.org/plugin/resources). SASS/SCSS support is available via the [SASS/SCSS Asset Pipeline Plugin](https://grails.org/plugin/sass-asset-pipeline).*
+
 ## Installation
 Add the plugin to the `plugins` block of your `BuildConfig.groovy`:
 
